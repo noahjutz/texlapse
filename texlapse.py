@@ -1,11 +1,18 @@
 #!/usr/bin/env python
 
 import subprocess
-import util
+
+commits = {}
 
 
 def main():
-    print("Hello world!")
+    clone_repo()
+    for commit in commits:
+        show_info(commit)
+        latexmk(commit)
+        pdf_to_images(commit)
+        combine_images(commit)
+    pngs_to_timelapse()
 
 
 def clone_repo():
@@ -13,22 +20,26 @@ def clone_repo():
 
 
 def get_commits():
+    commits = {}
+
+
+def latexmk(commit):
     pass
 
 
-def latexmk():
+def pdf_to_images(commit):
     pass
 
 
-def pdf_to_images():
-    pass
-
-
-def combine_images():
+def combine_images(commit):
     pass
 
 
 def pngs_to_timelapse():
+    pass
+
+
+def show_info(comit):
     pass
 
 
