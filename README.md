@@ -14,7 +14,7 @@ Create a timelapse of a tex repository.
     4.1 pdftoppm -> output/png/commit/n.png
     4.2 show info
 5 stitch together pngs: for commit in commits:
-    5.1 TODO
+    5.1 pillow -> output/arranged/commit.png
     5.2 show info
 6 ffmpeg stiched pngs
     6.1 ffmpeg -> output/mp4/final.mp4
@@ -37,4 +37,6 @@ texlapse
                 ...
         mp4
             final.mp4
+        arranged
+            42knlkj.png
 ```
