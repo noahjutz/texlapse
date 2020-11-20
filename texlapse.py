@@ -6,6 +6,7 @@ import subprocess
 def main():
     clone_repo()
     for commit in get_commits():
+        print(f"{commit}")
         show_info(commit)
         latexmk(commit)
         pdf_to_images(commit)
@@ -35,7 +36,8 @@ def get_commits():
     out = run(
         "git -C input/w-seminararbeit/ log --pretty=\"%H\""
     )
-    return out[0].stdout.split()
+    commits = out[0].stdout.decode().split()
+    return commits
 
 
 def latexmk(commit):
