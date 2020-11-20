@@ -2,10 +2,14 @@
 
 import subprocess
 
+commits = []
+
 
 def main():
+    global commits
     clone_repo()
-    for commit in get_commits():
+    commits = get_commits()
+    for commit in commits:
         show_info(commit)
         latexmk(commit)
         pdf_to_images(commit)
@@ -20,6 +24,8 @@ def run(command):
 
 def clone_repo():
     run("mkdir input")
+    run("mkdir output")
+    run("mkdir output/pdf")
     run("git -C input/ clone https://github.com/noahjutz/w-seminararbeit.git")
 
 
@@ -49,10 +55,14 @@ def pngs_to_timelapse():
 
 
 def show_info(commit):
-    subject = " ".join(run(f"git -C input/w-seminararbeit/ show --pretty=format:'%s' {commit} | head -1").stdout.decode().splitlines())
-    body = " ".join(run(f"git -C input/w-seminararbeit/ show --pretty=format:'%b' {commit} | head -1").stdout.decode().splitlines())
-    date = " ".join(run(f"git -C input/w-seminararbeit/ show --pretty=format:'%ci' {commit} | head -1").stdout.decode().splitlines())
-    print(f"{commit[:16]} {subject}")
+    subject = " ".join(
+        run(f"git -C input/w-seminararbeit/ show --pretty=format:'%s' {commit} | head -1").stdout.decode().splitlines())
+    body = " ".join(
+        run(f"git -C input/w-seminararbeit/ show --pretty=format:'%b' {commit} | head -1").stdout.decode().splitlines())
+    date = " ".join(run(
+        f"git -C input/w-seminararbeit/ show --pretty=format:'%ci' {commit} | head -1").stdout.decode().splitlines())
+    index = commits.index(commit)
+    print(f"{commit[:16]} {subject} ({index}/{len(commits)})")
 
 
 if __name__ == "__main__":
