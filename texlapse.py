@@ -6,7 +6,6 @@ import subprocess
 def main():
     clone_repo()
     for commit in get_commits():
-        print(f"{commit}")
         show_info(commit)
         latexmk(commit)
         pdf_to_images(commit)
@@ -56,8 +55,11 @@ def pngs_to_timelapse():
     pass
 
 
-def show_info(comit):
-    pass
+def show_info(commit):
+    out = run(
+        f"git -C input/w-seminararbeit/ show {commit}"
+    )
+    print(out[0].stdout.decode())
 
 
 if __name__ == "__main__":
