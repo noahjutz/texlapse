@@ -2,13 +2,10 @@
 
 import subprocess
 
-commits = {}
-
 
 def main():
     clone_repo()
-    get_commits()
-    for commit in commits:
+    for commit in get_commits():
         show_info(commit)
         latexmk(commit)
         pdf_to_images(commit)
@@ -17,11 +14,14 @@ def main():
 
 
 def run(*args):
+    stdouts = []
     for command in args:
         print(f"==> {command}")
-        output = subprocess.run([f"{command} &> /dev/null"], shell=True, )
-        is_success = output.returncode == 0
+        cmd = subprocess.run([command], shell=True, )
+        is_success = cmd.returncode == 0
         print(f"    {'SUCCESS' if is_success else 'FAIL'}")
+        stdouts.append(cmd.stdout)
+    return stdouts
 
 
 def clone_repo():
@@ -32,7 +32,10 @@ def clone_repo():
 
 
 def get_commits():
-    commits = {}
+    out = run(
+        "git -C input/w-seminararbeit/ log --pretty=\"%H\""
+    )
+    return out[0].split()
 
 
 def latexmk(commit):
