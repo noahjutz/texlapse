@@ -14,10 +14,7 @@ def main():
 
 
 def run(command):
-    print(f"==> {command}")
     cmd = subprocess.run(command, shell=True, capture_output=True)
-    is_success = cmd.returncode == 0
-    print(f"    {'SUCCESS' if is_success else 'FAIL'}")
     return cmd
 
 
@@ -52,7 +49,6 @@ def show_info(commit):
     subject = " ".join(run(f"git -C input/w-seminararbeit/ show --pretty=format:'%s' {commit} | head -1").stdout.decode().splitlines())
     body = " ".join(run(f"git -C input/w-seminararbeit/ show --pretty=format:'%b' {commit} | head -1").stdout.decode().splitlines())
     date = " ".join(run(f"git -C input/w-seminararbeit/ show --pretty=format:'%ci' {commit} | head -1").stdout.decode().splitlines())
-    print("===========================")
     print(f"{commit[:16]} {subject}")
 
 
