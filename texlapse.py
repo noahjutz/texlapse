@@ -17,7 +17,7 @@ def run(*args):
     cmdList = []
     for command in args:
         print(f"==> {command}")
-        cmd = subprocess.run(command, shell=True)
+        cmd = subprocess.run(command, shell=True, capture_output=True)
         is_success = cmd.returncode == 0
         print(f"    {'SUCCESS' if is_success else 'FAIL'}")
         cmdList.append(cmd)
