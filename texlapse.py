@@ -19,6 +19,12 @@ def main():
 
 def run(command):
     cmd = subprocess.run(command, shell=True, capture_output=True, input="")
+    print(f"    {cmd.returncode}: {cmd.args}")
+    open("output/log", "a").write(f"\n==========================="
+                                  f"\nargs: {cmd.args}"
+                                  f"\nreturncode: {cmd.returncode}"
+                                  f"\nstdout: {cmd.stdout}"
+                                  f"\nstderr: {cmd.stderr}")
     return cmd
 
 
@@ -26,6 +32,7 @@ def clone_repo():
     run("mkdir input")
     run("mkdir output")
     run("mkdir output/pdf")
+    run("touch output/log")
     run("git -C input/ clone https://github.com/noahjutz/w-seminararbeit.git")
 
 
