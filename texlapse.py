@@ -14,14 +14,14 @@ def main():
 
 
 def run(*args):
-    stdouts = []
+    cmdList = []
     for command in args:
         print(f"==> {command}")
-        cmd = subprocess.run([command], shell=True, )
+        cmd = subprocess.run(command, shell=True)
         is_success = cmd.returncode == 0
         print(f"    {'SUCCESS' if is_success else 'FAIL'}")
-        stdouts.append(cmd.stdout)
-    return stdouts
+        cmdList.append(cmd)
+    return cmdList
 
 
 def clone_repo():
@@ -35,7 +35,7 @@ def get_commits():
     out = run(
         "git -C input/w-seminararbeit/ log --pretty=\"%H\""
     )
-    return out[0].split()
+    return out[0].stdout.split()
 
 
 def latexmk(commit):
