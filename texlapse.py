@@ -49,8 +49,11 @@ def pngs_to_timelapse():
 
 
 def show_info(commit):
-    out = run(f"git -C input/w-seminararbeit/ show {commit}")
-    print(out.stdout.decode())
+    subject = " ".join(run(f"git -C input/w-seminararbeit/ show --pretty=format:'%s' {commit} | head -1").stdout.decode().splitlines())
+    body = " ".join(run(f"git -C input/w-seminararbeit/ show --pretty=format:'%b' {commit} | head -1").stdout.decode().splitlines())
+    date = " ".join(run(f"git -C input/w-seminararbeit/ show --pretty=format:'%ci' {commit} | head -1").stdout.decode().splitlines())
+    print("===========================")
+    print(f"{commit[:16]} {subject}")
 
 
 if __name__ == "__main__":
