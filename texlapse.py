@@ -20,11 +20,14 @@ def main():
 def run(command):
     cmd = subprocess.run(command, shell=True, capture_output=True, input="")
     print(f"    {cmd.returncode}: {cmd.args}")
-    open("output/log", "a").write(f"\n==========================="
-                                  f"\nargs: {cmd.args}"
-                                  f"\nreturncode: {cmd.returncode}"
-                                  f"\nstdout: {cmd.stdout}"
-                                  f"\nstderr: {cmd.stderr}")
+    try:
+        open("output/log", "a").write(f"\n==========================="
+                                      f"\nargs: {cmd.args}"
+                                      f"\nreturncode: {cmd.returncode}"
+                                      f"\nstdout: {cmd.stdout}"
+                                      f"\nstderr: {cmd.stderr}")
+    except:
+        print("failed to log")
     return cmd
 
 
@@ -32,6 +35,7 @@ def clone_repo():
     run("mkdir input")
     run("mkdir output")
     run("mkdir output/pdf")
+    run("mkdir output/png")
     run("touch output/log")
     run("git -C input/ clone https://github.com/noahjutz/w-seminararbeit.git")
 
@@ -50,7 +54,8 @@ def latexmk(commit):
 
 
 def pdf_to_images(commit):
-    pass
+    run(f"mkdir output/png/{commit}")
+    run(f"pdftoppm -png output/pdf/{commit}.pdf output/png/{commit}/{commit}")
 
 
 def combine_images(commit):
