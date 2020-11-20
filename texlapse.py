@@ -30,7 +30,10 @@ def get_commits():
 
 
 def latexmk(commit):
-    pass
+    run("git -C input/w-seminararbeit/ reset --hard")
+    run(f"git -C input/w-seminararbeit/ checkout {commit}")
+    out = run("git -C input/w-seminararbeit/ show HEAD")
+    print(out.stdout.decode())
 
 
 def pdf_to_images(commit):
