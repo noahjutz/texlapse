@@ -13,29 +13,22 @@ def main():
     pngs_to_timelapse()
 
 
-def run(*args):
-    cmd_list = []
-    for command in args:
-        print(f"==> {command}")
-        cmd = subprocess.run(command, shell=True, capture_output=True)
-        is_success = cmd.returncode == 0
-        print(f"    {'SUCCESS' if is_success else 'FAIL'}")
-        cmd_list.append(cmd)
-    return cmd_list
+def run(command):
+    print(f"==> {command}")
+    cmd = subprocess.run(command, shell=True, capture_output=True)
+    is_success = cmd.returncode == 0
+    print(f"    {'SUCCESS' if is_success else 'FAIL'}")
+    return cmd
 
 
 def clone_repo():
-    run(
-        "mkdir input",
-        "git -C input/ clone https://github.com/noahjutz/w-seminararbeit.git"
-    )
+    run("mkdir input")
+    run("git -C input/ clone https://github.com/noahjutz/w-seminararbeit.git")
 
 
 def get_commits():
-    out = run(
-        "git -C input/w-seminararbeit/ log --pretty=\"%H\""
-    )
-    commits = out[0].stdout.decode().split()
+    out = run("git -C input/w-seminararbeit/ log --pretty=\"%H\"")
+    commits = out.stdout.decode().split()
     return commits
 
 
@@ -56,10 +49,8 @@ def pngs_to_timelapse():
 
 
 def show_info(commit):
-    out = run(
-        f"git -C input/w-seminararbeit/ show {commit}"
-    )
-    print(out[0].stdout.decode())
+    out = run(f"git -C input/w-seminararbeit/ show {commit}")
+    print(out.stdout.decode())
 
 
 if __name__ == "__main__":
