@@ -14,7 +14,7 @@ def main():
 
 
 def run(command):
-    cmd = subprocess.run(command, shell=True, capture_output=True)
+    cmd = subprocess.run(command, shell=True, capture_output=True, input="")
     return cmd
 
 
@@ -32,8 +32,8 @@ def get_commits():
 def latexmk(commit):
     run("git -C input/w-seminararbeit/ reset --hard")
     run(f"git -C input/w-seminararbeit/ checkout {commit}")
-    out = run("git -C input/w-seminararbeit/ show HEAD")
-    print(out.stdout.decode())
+    run("latexmk -pdf -outdir=input/w-seminararbeit input/w-seminararbeit/main.tex")
+    run(f"cp input/w-seminararbeit/main.pdf output/pdf/{commit}.pdf")
 
 
 def pdf_to_images(commit):
