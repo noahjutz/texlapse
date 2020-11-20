@@ -7,6 +7,7 @@ commits = {}
 
 def main():
     clone_repo()
+    get_commits()
     for commit in commits:
         show_info(commit)
         latexmk(commit)
