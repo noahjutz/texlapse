@@ -6,6 +6,14 @@ from PIL import Image
 
 commits = []
 
+column_width = 1241
+row_height = 1754
+panels = 26
+rows = 3
+columns = math.ceil(panels / rows)
+total_width = columns * column_width
+total_height = rows * row_height
+
 
 def main():
     global commits
@@ -16,6 +24,7 @@ def main():
         latexmk(commit)
         pdf_to_images(commit)
         merge_images(commit)
+        compress_merged_images(commit)
     render_timelapse()
 
 
@@ -61,17 +70,8 @@ def pdf_to_images(commit):
 
 
 def merge_images(commit):
-    column_width = 1241
-    row_height = 1754
-    panels = 26
-    rows = 3
-    columns = math.ceil(panels / rows)
-
-    merged_width = columns * column_width
-    merged_height = rows * row_height
-
     page_paths = run(f"ls output/png/{commit}").stdout.decode().splitlines()
-    merged_image = Image.new("RGB", (merged_width, merged_height), (255, 255, 255))
+    merged_image = Image.new("RGB", (total_width, total_height), (255, 255, 255))
     for row in range(0, rows):
         for column in range(0, columns):
             index = row * columns + column
@@ -93,6 +93,12 @@ def show_info(commit):
         run(f"git -C input/w-seminararbeit/ show --pretty=format:'%s' {commit} | head -1").stdout.decode().splitlines())
     index = commits.index(commit)
     print(f"{commit[:16]} {subject} ({index}/{len(commits)})")
+
+
+def compress_merged_images(commit):
+    image = Image.open(f"output/png/{commit}/{commit}.png")
+    image = image.resize((int(total_width / 3), int(total_height / 3)), Image.ANTIALIAS)
+    image.save(f"output/png/{commit}/{commit}_compressed.png", optimize=True, quality=95)
 
 
 if __name__ == "__main__":
