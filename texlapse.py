@@ -84,7 +84,7 @@ def merge_images(commit):
 
 def render_timelapse():
     for i, commit in enumerate(commits):
-        run(f"cp output/png/{commit}/{commit}.png output/mp4/{i}.png")
+        run(f"cp output/png/{commit}/{commit}_compressed.png output/mp4/{i}.png")
     run("ffmpeg -framerate 24 -i output/mp4/%d.png output/mp4/final.mp4")
 
 
