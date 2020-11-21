@@ -60,20 +60,24 @@ def pdf_to_images(commit):
 
 
 def merge_images(commit):
-    paper_width = 1241
-    paper_height = 1754
+    column_width = 1241
+    row_height = 1754
     pages = 24
     rows = 3
-    columns = pages / rows
+    columns = int(pages / rows)
 
-    merged_width = columns * paper_width
-    merged_height = rows * paper_height
+    merged_width = columns * column_width
+    merged_height = rows * row_height
 
     page_paths = run(f"ls output/png/{commit}").stdout.decode().splitlines()
+    print(page_paths)
     merged_image = Image.new("RGB", (merged_width, merged_height))
     for page_path in page_paths:
-        page = Image.open(page_path)
-        merged_image.paste()
+        page = Image.open(f"output/png/{commit}/{page_path}")
+        for row in range(0, rows):
+            for column in range(0, columns):
+                merged_image.paste(im=page, box=(column * column_width, row * row_height))
+    merged_image.save(f"output/png/{commit}/{commit}.png")
 
 
 def pngs_to_timelapse():
