@@ -59,7 +59,6 @@ def pdf_to_images(commit):
     run(f"pdftoppm -png output/pdf/{commit}.pdf output/png/{commit}/{commit}")
 
 
-# TODO: Fix bug: Because column/row for loops are INSIDE OF the page_path for loop, the entire image gets filled with the same page
 def merge_images(commit):
     column_width = 1241
     row_height = 1754
@@ -71,12 +70,14 @@ def merge_images(commit):
     merged_height = rows * row_height
 
     page_paths = run(f"ls output/png/{commit}").stdout.decode().splitlines()
-    merged_image = Image.new("RGB", (merged_width, merged_height))
-    for page_path in page_paths:
-        page = Image.open(f"output/png/{commit}/{page_path}")
-        for row in range(0, rows):
-            for column in range(0, columns):
-                merged_image.paste(im=page, box=(column * column_width, row * row_height))
+    merged_image = Image.new("RGB", (merged_width, merged_height), (255, 255, 255))
+    for row in range(0, rows):
+        for column in range(0, columns):
+            index = row * columns + column
+            if len(page_paths) <= index:
+                continue
+            page = Image.open(f"output/png/{commit}/{page_paths[index]}")
+            merged_image.paste(im=page, box=(column * column_width, row * row_height))
     merged_image.save(f"output/png/{commit}/{commit}.png")
 
 
