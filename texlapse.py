@@ -16,7 +16,7 @@ def main():
         latexmk(commit)
         pdf_to_images(commit)
         merge_images(commit)
-    pngs_to_timelapse()
+    render_timelapse()
 
 
 def run(command):
@@ -26,8 +26,8 @@ def run(command):
         open("output/log", "a").write(f"\n==========================="
                                       f"\nargs: {cmd.args}"
                                       f"\nreturncode: {cmd.returncode}"
-                                      f"\nstdout: {cmd.stdout}"
-                                      f"\nstderr: {cmd.stderr}")
+                                      f"\nstdout: \n{cmd.stdout.decode()}"
+                                      f"\nstderr: \n{cmd.stderr.decode()}")
     except:
         print("failed to log")
     return cmd
@@ -39,6 +39,7 @@ def clone_repo():
     run("mkdir output/pdf")
     run("mkdir output/png")
     run("touch output/log")
+    run("mkdir output/mp4")
     run("git -C input/ clone https://github.com/noahjutz/w-seminararbeit.git")
 
 
@@ -82,8 +83,10 @@ def merge_images(commit):
     merged_image.save(f"output/png/{commit}/{commit}.png")
 
 
-def pngs_to_timelapse():
-    pass
+def render_timelapse():
+    for i, commit in enumerate(commits):
+        run(f"cp output/png/{commit}/{commit}.png output/mp4/{i}.png")
+    run("ffmpeg -framerate 24 -i output/mp4/%d.png output/mp4/final.mp4")
 
 
 def show_info(commit):
