@@ -86,6 +86,7 @@ def render_timelapse():
     for i, commit in enumerate(commits):
         run(f"cp output/png/{commit}/{commit}_compressed.png output/mp4/{i}.png")
     run("ffmpeg -framerate 24 -i output/mp4/%d.png output/mp4/final.mp4")
+    run("ffmpeg -i output/mp4/final.mp4 -vf reverse output/mp4/final_reverse.mp4")
 
 
 def show_info(commit):
