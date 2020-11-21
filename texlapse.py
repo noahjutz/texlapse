@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import subprocess
+import math
 from PIL import Image
 
 commits = []
@@ -62,9 +63,9 @@ def pdf_to_images(commit):
 def merge_images(commit):
     column_width = 1241
     row_height = 1754
-    panels = 24
+    panels = 26
     rows = 3
-    columns = int(panels / rows)
+    columns = math.ceil(panels / rows)
 
     merged_width = columns * column_width
     merged_height = rows * row_height
