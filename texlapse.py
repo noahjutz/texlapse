@@ -28,7 +28,7 @@ def run(command):
                                       f"\nreturncode: {cmd.returncode}"
                                       f"\nstdout: \n{cmd.stdout.decode()}"
                                       f"\nstderr: \n{cmd.stderr.decode()}")
-    except:
+    except FileNotFoundError:
         print("failed to log")
     return cmd
 
@@ -45,8 +45,7 @@ def clone_repo():
 
 def get_commits():
     out = run("git -C input/w-seminararbeit/ log --pretty=\"%H\"")
-    commits = out.stdout.decode().split()
-    return commits
+    return out.stdout.decode().split()
 
 
 def latexmk(commit):
@@ -92,10 +91,6 @@ def render_timelapse():
 def show_info(commit):
     subject = " ".join(
         run(f"git -C input/w-seminararbeit/ show --pretty=format:'%s' {commit} | head -1").stdout.decode().splitlines())
-    body = " ".join(
-        run(f"git -C input/w-seminararbeit/ show --pretty=format:'%b' {commit} | head -1").stdout.decode().splitlines())
-    date = " ".join(run(
-        f"git -C input/w-seminararbeit/ show --pretty=format:'%ci' {commit} | head -1").stdout.decode().splitlines())
     index = commits.index(commit)
     print(f"{commit[:16]} {subject} ({index}/{len(commits)})")
 
