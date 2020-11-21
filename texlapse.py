@@ -75,7 +75,7 @@ def merge_images(commit):
         for column in range(0, columns):
             index = row * columns + column
             if len(page_paths) <= index:
-                continue
+                break
             page = Image.open(f"output/png/{commit}/{page_paths[index]}")
             merged_image.paste(im=page, box=(column * column_width, row * row_height))
     merged_image.save(f"output/png/{commit}/{commit}.png")
