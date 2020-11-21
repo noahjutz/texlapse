@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import subprocess
+from PIL import Image
 
 commits = []
 
@@ -13,7 +14,7 @@ def main():
         show_info(commit)
         latexmk(commit)
         pdf_to_images(commit)
-        combine_images(commit)
+        merge_images(commit)
     pngs_to_timelapse()
 
 
@@ -58,8 +59,21 @@ def pdf_to_images(commit):
     run(f"pdftoppm -png output/pdf/{commit}.pdf output/png/{commit}/{commit}")
 
 
-def combine_images(commit):
-    pass
+def merge_images(commit):
+    paper_width = 1241
+    paper_height = 1754
+    pages = 24
+    rows = 3
+    columns = pages / rows
+
+    merged_width = columns * paper_width
+    merged_height = rows * paper_height
+
+    page_paths = run(f"ls output/png/{commit}").stdout.decode().splitlines()
+    merged_image = Image.new("RGB", (merged_width, merged_height))
+    for page_path in page_paths:
+        page = Image.open(page_path)
+        merged_image.paste()
 
 
 def pngs_to_timelapse():
